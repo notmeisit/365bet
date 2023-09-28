@@ -386,18 +386,56 @@ var pysOptions = {"staticEvents":[],"dynamicEvents":[],"triggerEvents":[],"trigg
 </section>
 <section class="elementor-section elementor-top-section elementor-element elementor-element-13c2981 elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-element_type="section" data-id="13c2981" data-settings='{"background_background":"classic"}'>
 <div class="elementor-container elementor-column-gap-default">
-    <form action="#" method="POST">
-<h1 style="color: #ffe418">השאירו פרטים ונחזור אליכם</h1>
+    <form id="contact-form">
+        <h1 style="color: #ffe418">השאירו פרטים ונחזור אליכם</h1>
         <input type="text" id="name" name="name" placeholder="ישראל ישראלי" required=""><br><br>
-
         <input type="tel" id="tel" name="tel" placeholder="05x-xxx-xxxx" required=""><br><br>
-
-
-        <br><br>
-
         <input type="submit" value="Submit">
     </form>
-<div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-591c856" data-element_type="column" data-id="591c856">
+
+    <div id="message-container"></div>
+
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const tel = document.getElementById('tel').value;
+
+            const data = { name, tel };
+
+            fetch('http://boom365.pythonanywhere.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Handle the response as needed, e.g., show a success message or error message on the page
+                    const messageContainer = document.getElementById('message-container');
+                    if (data.message === 'Data submitted successfully') {
+                        // Show a success message to the user
+                        messageContainer.innerHTML = '<p style="color: green;">טופס נשלח בהצלחה נחזור אליך בהקדם</p>';
+                        // You can also clear the form fields if needed
+                        document.getElementById('name').value = '';
+                        document.getElementById('tel').value = '';
+                    } else {
+                        // Handle the case where the data is not valid
+                        messageContainer.innerHTML = '<p style="color: red;">נתונים שגויים אנא הכנס נתונים אמיתים</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors, e.g., show an error message
+                    const messageContainer = document.getElementById('message-container');
+                    messageContainer.innerHTML = '<p style="color: red;">יש בעיה בשליחת הטופס </p>';
+                });
+        });
+    </script>
+    <div class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-591c856" data-element_type="column" data-id="591c856">
 <div class="elementor-widget-wrap elementor-element-populated">
 <section class="elementor-section elementor-inner-section elementor-element elementor-element-9dc363c elementor-reverse-mobile elementor-section-boxed elementor-section-height-default elementor-section-height-default" data-element_type="section" data-id="9dc363c">
 <div class="elementor-container elementor-column-gap-default">
